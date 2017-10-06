@@ -85,10 +85,10 @@ before_script:
   # Install the modules so that they are properly registered on the system
   # We do not install VigiRRD that way because it looks for an unsatisfiable
   # requirement called "py-rrdtool" (instead of "python-rrdtool")
-  - for m in $MODULES; do cd vigilo/$m; pip install .; cd ..; done
+  - for m in $MODULES; do cd vigilo/$m; pip install .; cd ../..; done
 
   # Compile the translation catalogs
-  - for m in $MODULES; do cd vigilo/$m; python setup.py compile_catalog || /bin/true; cd ../; done
+  - for m in $MODULES; do cd vigilo/$m; python setup.py compile_catalog || /bin/true; cd ../..; done
 
 script:
   - cd vigilo/common
