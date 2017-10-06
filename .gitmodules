@@ -1,0 +1,56 @@
+[submodule "common"]
+	path = common
+	url = https://github.com/vigilo/common.git
+	branch = develop
+[submodule "themes-default"]
+	path = themes-default
+	url = https://github.com/vigilo/themes-default.git
+	branch = develop
+[submodule "turbogears"]
+	path = turbogears
+	url = https://github.com/vigilo/turbogears.git
+	branch = develop
+[submodule "models"]
+	path = models
+	url = https://github.com/vigilo/models.git
+	branch = develop
+[submodule "connector"]
+	path = connector
+	url = https://github.com/vigilo/connector.git
+	branch = develop
+[submodule "connector-nagios"]
+	path = connector-nagios
+	url = https://github.com/vigilo/connector-nagios.git
+	branch = develop
+[submodule "connector-metro"]
+	path = connector-metro
+	url = https://github.com/vigilo/connector-metro.git
+	branch = develop
+[submodule "connector-syncevents"]
+	path = connector-syncevents
+	url = https://github.com/vigilo/connector-syncevents.git
+	branch = develop
+[submodule "correlator"]
+	path = correlator
+	url = https://github.com/vigilo/correlator.git
+	branch = develop
+[submodule "vigiconf"]
+	path = vigiconf
+	url = https://github.com/vigilo/vigiconf.git
+	branch = develop
+[submodule "vigiconf-local"]
+	path = vigiconf-local
+	url = https://github.com/vigilo/vigiconf-local.git
+	branch = develop
+[submodule "vigiboard"]
+	path = vigiboard
+	url = https://github.com/vigilo/vigiboard.git
+	branch = develop
+[submodule "vigigraph"]
+	path = vigigraph
+	url = https://github.com/vigilo/vigigraph.git
+	branch = develop
+[submodule "vigirrd"]
+	path = vigirrd
+	url = https://github.com/vigilo/vigirrd.git
+	branch = develop
