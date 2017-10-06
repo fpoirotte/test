@@ -44,54 +44,54 @@ before_script:
 
   # Fake the instantiation of template files (we just copy them as-is)
   # TurboGears bridge
-  - cp turbogears/pkg/vigilo-clean-turbogears-sessions.sh.in turbogears/pkg/vigilo-clean-turbogears-sessions.sh
+  - cp vigilo/turbogears/pkg/vigilo-clean-turbogears-sessions.sh.in vigilo/turbogears/pkg/vigilo-clean-turbogears-sessions.sh
   # Connectors
-  - cp connector-metro/settings.ini.in                       connector-metro/settings.ini
-  - cp connector-nagios/settings.ini.in                      connector-nagios/settings.ini
-  - cp connector-syncevents/pkg/cronjobs.in                  connector-syncevents/pkg/vigilo-connector-syncevents.cron
+  - cp vigilo/connector-metro/settings.ini.in                       vigilo/connector-metro/settings.ini
+  - cp vigilo/connector-nagios/settings.ini.in                      vigilo/connector-nagios/settings.ini
+  - cp vigilo/connector-syncevents/pkg/cronjobs.in                  vigilo/connector-syncevents/pkg/vigilo-connector-syncevents.cron
   # VigiRules
-  - cp correlator/settings.ini.in                            correlator/settings.ini
+  - cp vigilo/correlator/settings.ini.in                            vigilo/correlator/settings.ini
   # VigiConf
-  - cp vigiconf/settings.ini.in                              vigiconf/settings.ini
-  - cp vigiconf/pkg/cronjobs.in                              vigiconf/pkg/vigilo-vigiconf.cron
-  - cp vigiconf-local/settings-local.ini.in                  vigiconf-local/settings-local.ini
+  - cp vigilo/vigiconf/settings.ini.in                              vigilo/vigiconf/settings.ini
+  - cp vigilo/vigiconf/pkg/cronjobs.in                              vigilo/vigiconf/pkg/vigilo-vigiconf.cron
+  - cp vigilo/vigiconf-local/settings-local.ini.in                  vigilo/vigiconf-local/settings-local.ini
   # VigiBoard
-  - cp vigiboard/pkg/vigilo-vigiboard.sh.in                  vigiboard/pkg/vigilo-vigiboard.sh
-  - cp vigiboard/deployment/logrotate.conf.in                vigiboard/deployment/logrotate.conf
-  - cp vigiboard/deployment/settings.ini.in                  vigiboard/deployment/settings.ini
-  - cp vigiboard/deployment/vigiboard.conf.in                vigiboard/deployment/vigiboard.conf
-  - cp vigiboard/deployment/vigiboard.wsgi.in                vigiboard/deployment/vigiboard.wsgi
+  - cp vigilo/vigiboard/pkg/vigilo-vigiboard.sh.in                  vigilo/vigiboard/pkg/vigilo-vigiboard.sh
+  - cp vigilo/vigiboard/deployment/logrotate.conf.in                vigilo/vigiboard/deployment/logrotate.conf
+  - cp vigilo/vigiboard/deployment/settings.ini.in                  vigilo/vigiboard/deployment/settings.ini
+  - cp vigilo/vigiboard/deployment/vigiboard.conf.in                vigilo/vigiboard/deployment/vigiboard.conf
+  - cp vigilo/vigiboard/deployment/vigiboard.wsgi.in                vigilo/vigiboard/deployment/vigiboard.wsgi
   # VigiGraph
-  - cp vigigraph/deployment/logrotate.conf.in                vigigraph/deployment/logrotate.conf
-  - cp vigigraph/deployment/settings.ini.in                  vigigraph/deployment/settings.ini
-  - cp vigigraph/deployment/vigigraph.conf.in                vigigraph/deployment/vigigraph.conf
-  - cp vigigraph/deployment/vigigraph.wsgi.in                vigigraph/deployment/vigigraph.wsgi
+  - cp vigilo/vigigraph/deployment/logrotate.conf.in                vigilo/vigigraph/deployment/logrotate.conf
+  - cp vigilo/vigigraph/deployment/settings.ini.in                  vigilo/vigigraph/deployment/settings.ini
+  - cp vigilo/vigigraph/deployment/vigigraph.conf.in                vigilo/vigigraph/deployment/vigigraph.conf
+  - cp vigilo/vigigraph/deployment/vigigraph.wsgi.in                vigilo/vigigraph/deployment/vigigraph.wsgi
   # VigiRRD
-  - cp vigirrd/deployment/logrotate.conf.in                  vigirrd/deployment/logrotate.conf
-  - cp vigirrd/deployment/settings.ini.in                    vigirrd/deployment/settings.ini
-  - cp vigirrd/deployment/vigirrd.conf.in                    vigirrd/deployment/vigirrd.conf
-  - cp vigirrd/deployment/vigirrd.wsgi.in                    vigirrd/deployment/vigirrd.wsgi
-  - cp vigirrd/deployment/cronjobs.in                        vigirrd/deployment/vigirrd.cron
+  - cp vigilo/vigirrd/deployment/logrotate.conf.in                  vigilo/vigirrd/deployment/logrotate.conf
+  - cp vigilo/vigirrd/deployment/settings.ini.in                    vigilo/vigirrd/deployment/settings.ini
+  - cp vigilo/vigirrd/deployment/vigirrd.conf.in                    vigilo/vigirrd/deployment/vigirrd.conf
+  - cp vigilo/vigirrd/deployment/vigirrd.wsgi.in                    vigilo/vigirrd/deployment/vigirrd.wsgi
+  - cp vigilo/vigirrd/deployment/cronjobs.in                        vigilo/vigirrd/deployment/vigirrd.cron
 
   # Apply patches
   - export PYTHON_SITELIB=`python -c 'from distutils.sysconfig import get_python_lib; print get_python_lib()'`
-  - patch -d "$PYTHON_SITELIB" -p0 < common/patches/001-configobj-semicolon_for_comments.diff
-  #- patch -d "$PYTHON_SITELIB" -p1 < turbogears/patches/003_paste-deploy_SafeConfigParser.diff
+  - patch -d "$PYTHON_SITELIB" -p0 < vigilo/common/patches/001-configobj-semicolon_for_comments.diff
+  #- patch -d "$PYTHON_SITELIB" -p1 < vigilo/turbogears/patches/003_paste-deploy_SafeConfigParser.diff
 
   # Replace py-rrdtool with python-rrdtool in VigiRRD
   # to account for distribution specificities
-  - sed -i 's/py-rrdtool/python-rrdtool/' vigirrd/setup.py
+  - sed -i 's/py-rrdtool/python-rrdtool/' vigilo/vigirrd/setup.py
 
   # Install the modules so that they are properly registered on the system
   # We do not install VigiRRD that way because it looks for an unsatisfiable
   # requirement called "py-rrdtool" (instead of "python-rrdtool")
-  - for m in $MODULES; do cd $m; pip install .; cd ..; done
+  - for m in $MODULES; do cd vigilo/$m; pip install .; cd ..; done
 
   # Compile the translation catalogs
-  - for m in $MODULES; do cd $m; python setup.py compile_catalog || /bin/true; cd ../; done
+  - for m in $MODULES; do cd vigilo/$m; python setup.py compile_catalog || /bin/true; cd ../; done
 
 script:
-  - cd common
+  - cd vigilo/common
   - cd ../common               && nosetests
   - cd ../connector            && nosetests
   - cd ../models               && nosetests
