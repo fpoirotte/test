@@ -39,6 +39,19 @@ before_script:
   # Make sure we use the latest commits
   - git submodule update --remote
 
+  - mkdir -p deps
+  - cd deps
+  - pip download repoze.who-testutil
+  - pip download repoze.who-friendlyform
+  - tar xavf repoze.who-testutil-1.0.1.tar.gz
+  - tar xavf repoze.who-friendlyform-1.0.8.tar.gz
+  - wget https://bootstrap.pypa.io/ez_setup.py
+  - cp -f ez_setup.py repoze.who-testutil-1.0.1/
+  - cp -f ez_setup.py repoze.who-friendlyform-1.0.8/
+  - cd repoze.who-testutil-1.0.1/ && pip install . && ..
+  - cd repoze.who-friendlyform-1.0.8/ && pip install . && ..
+  - cd ..
+
   # Create a new file hierarchy to avoid permission issues on /etc, /var, and so on
   - mkdir -p /tmp/vigilo/etc /tmp/vigilo/var /tmp/vigilo/usr/share/locale
 
