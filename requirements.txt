@@ -6,7 +6,8 @@ ordereddict; python_version < '2.7'
 
 setuptools
 Babel >= 0.9.4
-configobj == 4.7.2
+#configobj == 4.7.2
+configobj == 5.0.6
 networkx == 1.8.1
 argparse; python_version < '2.7'
 
