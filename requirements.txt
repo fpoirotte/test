@@ -3,6 +3,7 @@ nose
 pylint
 mock
 ordereddict; python_version < '2.7'
+ez_setup
 
 setuptools
 Babel >= 0.9.4
