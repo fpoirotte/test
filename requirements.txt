@@ -15,7 +15,7 @@ repoze.who >= 2.0
 repoze.tm2 >= 1.0a4
 #repoze.who_testutil == 1.0
 repoze.who.plugins.sa
-repoze.who_friendlyform
+#repoze.who_friendlyform
 TurboGears2 == 2.3.1
 ToscaWidgets >= 0.9.7.1, < 1
 tw.forms
