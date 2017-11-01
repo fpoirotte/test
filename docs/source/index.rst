@@ -3,9 +3,18 @@ Welcome to Vigilo NMS's documentation!
 
 Contents:
 
-.. toctree::
-   :maxdepth: 2
+..  toctree::
+    :maxdepth: 2
 
+    vigilo/connector/doc/index
+    vigilo/connector-metro/doc/index
+    vigilo/connector-nagios/doc/index
+    vigilo/connector-syncevents/doc/index
+    vigilo/turbogears/doc/index
+    vigilo/vigiboard/doc/index
+    vigilo/vigigraph/doc/index
+    vigilo/vigirrd/doc/index
+    vigilo/vigiconf/doc/index
 
 
 Indices and tables
