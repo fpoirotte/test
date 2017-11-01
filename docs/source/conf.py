@@ -16,9 +16,11 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-from os.path import abspath, join
+import os
 import sys
+import shutil
 import subprocess
+from os.path import abspath, join
 
 # Add various components to the path (needed by autodoc.py)
 sys.path.insert(0, abspath(join('vigilo', 'vigiconf', 'src')))
@@ -27,18 +29,25 @@ sys.path.insert(0, abspath(join('vigilo', 'common', 'src')))
 # Update git submodules
 subprocess.check_call(['git', 'submodule', 'update', '--init', '--remote'])
 
-# Install some of the components
+# Prepare a fake installation directory
 tmpdir = abspath(join('..', 'tmp'))
 subprocess.check_call([
     'mkdir', '-p',
         join(tmpdir, 'etc'),
         join(tmpdir, 'var'),
         join(tmpdir, 'usr', 'share', 'locale')])
+
+# Prepare configuration files and such
+shutil.copyfile(join('vigilo', 'vigiconf', 'settings.ini.in'), join('vigilo', 'vigiconf', 'settings.ini'))
+shutil.copyfile(join('vigilo', 'vigiconf', 'pkg', 'cronjobs.in'), join('vigilo', 'vigiconf', 'pkg', 'vigilo-vigiconf.cron'))
+
+# Install some of the components
 for module in ('common', 'models', 'vigiconf'):
     subprocess.check_call(['pip', 'install', join('vigilo', module)],
                           env=dict(
                             SYSCONFDIR=join(tmpdir, 'etc'),
                             LOCALSTATEDIR=join(tmpdir, 'var'),
+                            PATH=os.environ['PATH'],
                           ))
 
 # Generate documentation for monitoring tests
@@ -49,7 +58,7 @@ subprocess.check_call(['python', 'vigilo/vigiconf/doc/autodoc.py'])
 # built documents.
 #
 # The short X.Y version.
-version = subprocess.check_output('git', '--git-dir=vigilo/common', 'describe', '--always', '--abbrev=0')
+version = subprocess.check_output(['git', '--git-dir=vigilo/common/.git', 'describe', '--always', '--abbrev=0'])
 if version.startswith('v'):
     version = version[1:]
 # The full version, including alpha/beta/rc tags.

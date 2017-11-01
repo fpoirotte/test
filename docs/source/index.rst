@@ -1,7 +1,7 @@
-Welcome to Vigilo NMS's documentation!
-======================================
+Vigilo NMS
+==========
 
-Contents:
+Table des matières :
 
 ..  toctree::
     :maxdepth: 2

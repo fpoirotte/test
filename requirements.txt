@@ -1,1 +1,4 @@
 epydoc
+setuptools
+Sphinx
+SQLAlchemy < 1.0.0
