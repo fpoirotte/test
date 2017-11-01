@@ -28,6 +28,8 @@ sys.path.insert(0, os.path.abspath(os.path.join('vigilo', 'common', 'src')))
 subprocess.check_call(['git', 'submodule', 'update', '--init', '--remote'])
 
 # Generate documentation for monitoring tests
+subprocess.check_call(['pip', 'install', 'vigilo/common/'])
+subprocess.check_call(['pip', 'install', 'vigilo/models/'])
 subprocess.check_call(['pip', 'install', 'vigilo/vigiconf/'])
 subprocess.check_call(['python', 'vigilo/vigiconf/doc/autodoc.py'])
 
