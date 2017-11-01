@@ -16,21 +16,32 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
+from os.path import abspath, join
 import sys
 import subprocess
 
 # Add various components to the path (needed by autodoc.py)
-sys.path.insert(0, os.path.abspath(os.path.join('vigilo', 'vigiconf', 'src')))
-sys.path.insert(0, os.path.abspath(os.path.join('vigilo', 'common', 'src')))
+sys.path.insert(0, abspath(join('vigilo', 'vigiconf', 'src')))
+sys.path.insert(0, abspath(join('vigilo', 'common', 'src')))
 
 # Update git submodules
 subprocess.check_call(['git', 'submodule', 'update', '--init', '--remote'])
 
+# Install some of the components
+tmpdir = osabspath(join('..', 'tmp'))
+subprocess.check_call([
+    'mkdir', '-p',
+        join(tmpdir, 'etc'),
+        join(tmpdir, 'var'),
+        join(tmpdir, 'usr', 'share', 'locale')])
+for module in ('common', 'models', 'vigiconf'):
+    subprocess.check_call(['pip', 'install', join('vigilo', module)],
+                          env=dict(
+                            SYSCONFDIR=join(tmpdir, 'etc'),
+                            LOCALSTATEDIR=join(tmpdir, 'var'),
+                          ))
+
 # Generate documentation for monitoring tests
-subprocess.check_call(['pip', 'install', 'vigilo/common/'])
-subprocess.check_call(['pip', 'install', 'vigilo/models/'])
-subprocess.check_call(['pip', 'install', 'vigilo/vigiconf/'])
 subprocess.check_call(['python', 'vigilo/vigiconf/doc/autodoc.py'])
 
 # The version info for the project you're documenting, acts as replacement for
