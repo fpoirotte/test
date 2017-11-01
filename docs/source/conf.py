@@ -28,7 +28,7 @@ sys.path.insert(0, abspath(join('vigilo', 'common', 'src')))
 subprocess.check_call(['git', 'submodule', 'update', '--init', '--remote'])
 
 # Install some of the components
-tmpdir = osabspath(join('..', 'tmp'))
+tmpdir = abspath(join('..', 'tmp'))
 subprocess.check_call([
     'mkdir', '-p',
         join(tmpdir, 'etc'),
