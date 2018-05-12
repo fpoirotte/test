@@ -17,9 +17,6 @@ php:
   - 7
 
 script:
-  - /bin/true
-
-after_success:
   - cd docs/src/ && sphinx-build -T -E -b html -d _build/doctrees -D language=en . _build/html
 
 #deploy:
