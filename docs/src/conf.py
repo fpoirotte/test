@@ -27,7 +27,7 @@ def prepare(globs, locs):
 
     # Load the second-stage configuration file.
     os.chdir(cwd)
-    conf = join(root, 'vendor', 'erebot', 'buildenv', 'sphinx', 'rtd.py')
+    conf = join(root, 'docs', 'src', 'rtd.py')
     print "Including the second configuration file (%s)..." % (conf, )
     exec(compile(open(conf).read(), conf, 'exec'), globs, locs)
 

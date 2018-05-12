@@ -7,6 +7,8 @@ addons:
     update: true
     packages:
       - python-sphinx
+      - python-babel
+      - doxygen
 
 notifications:
   email: false
