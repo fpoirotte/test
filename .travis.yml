@@ -22,7 +22,7 @@ script:
   - composer self-update -n
   - composer install -n
   - export COMMIT_DESC=`git describe --exact 2>/dev/null || git rev-parse --abbrev-ref HEAD`
-  - cd docs/src/ && do for lang in fr en; for builder in html latex; do sphinx-build -T -E -b $builder -d ../_build/doctrees -D language=$lang . "../enduser/$builder/$lang/$COMMIT_DESC"; done; make -C ../enduser/latex/$lang/$COMMIT_DESC all-pdf; done
+  - cd docs/src/ && for lang in fr en; do for builder in html latex; do sphinx-build -T -E -b $builder -d ../_build/doctrees -D language=$lang . "../enduser/$builder/$lang/$COMMIT_DESC"; done; make -C ../enduser/latex/$lang/$COMMIT_DESC all-pdf; done
 
 deploy:
   local-dir: docs/enduser/
