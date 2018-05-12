@@ -2,10 +2,10 @@ language: php
 sudo: false
 dist: trusty
 
-#addons:
-#  apt:
-#    packages:
-#      - python-openssl
+addons:
+  apt:
+    packages:
+      - python-sphinx
 
 notifications:
   email: false
