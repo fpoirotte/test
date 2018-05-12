@@ -18,6 +18,9 @@ php:
   - 7
 
 script:
+  - rm composer.lock
+  - composer self-update -n
+  - composer install -n
   - export COMMIT_DESC=`git describe --exact 2>/dev/null || git rev-parse --abbrev-ref HEAD`
   - cd docs/src/ && for builder in html latexpdf; do for lang in fr en; do sphinx-build -T -E -b $builder -d ../_build/doctrees -D language=$lang . "../enduser/$builder/$lang/$COMMIT_DESC"; done; done
 
