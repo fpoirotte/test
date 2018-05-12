@@ -27,11 +27,11 @@ script:
   - rm composer.lock
   - composer self-update -n
   - composer install -n
-  - export GHPAGES=`mktemp -d`
+  - export GHPAGES=`mktemp -d -p "docs/"`
   - export DEFAULT_BRANCH=`git symbolic-ref --short refs/remotes/origin/HEAD | cut -d/ -f2-`
   - git clone --branch=gh-pages https://github.com/${TRAVIS_REPO_SLUG}.git "$GHPAGES/"
   - rm -rf "$GHPAGES/.git"
-  - cd docs/src/ && for lang in fr en; do for builder in html latex; do rm -rf "$GHPAGES/refs/${TRAVIS_BRANCH}/$lang/$builder/"; sphinx-build -T -E -b $builder -d ../_build/doctrees -D language=$lang . "$GHPAGES/refs/${TRAVIS_BRANCH}/$lang/$builder"; done; make -C "$GHPAGES/refs/${TRAVIS_BRANCH}/$lang/latex/" all-pdf < /dev/null; find "$GHPAGES/refs/${TRAVIS_BRANCH}/$lang/latex/" ! -name "*.pdf"; done
+  - cd docs/src/ && for lang in fr en; do for builder in html latex; do rm -rf "../../$GHPAGES/refs/${TRAVIS_BRANCH}/$lang/$builder/"; sphinx-build -T -E -b $builder -d ../_build/doctrees -D language=$lang . "../../$GHPAGES/refs/${TRAVIS_BRANCH}/$lang/$builder"; done; make -C "../../$GHPAGES/refs/${TRAVIS_BRANCH}/$lang/latex/" all-pdf < /dev/null; find "../../$GHPAGES/refs/${TRAVIS_BRANCH}/$lang/latex/" ! -name "*.pdf"; done
   - if [ -n "$TRAVIS_TAG" ]; then ln -sfT "refs/${TRAVIS_BRANCH}" "$GHPAGES/stable"; else ln -sfT "refs/${TRAVIS_BRANCH}" "$GHPAGES/latest"; fi
   - touch "$GHPAGES/.nojekyll"
   - printf "%s" '<html><head><meta http-equiv="refresh" content="0; url=latest/en/html/"/></head><body onload="window.location.replace('"'"'latest/en/html/'"'"');"></body></html>' > "$GHPAGES/index.html"
