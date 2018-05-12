@@ -9,6 +9,7 @@ addons:
       - python-sphinx
       - python-babel
       - doxygen
+      - graphviz
 
 notifications:
   email: false
