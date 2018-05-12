@@ -4,6 +4,7 @@ dist: trusty
 
 addons:
   apt:
+    update: true
     packages:
       - python-sphinx
 
