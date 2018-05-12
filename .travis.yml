@@ -11,6 +11,7 @@ addons:
       - doxygen
       - graphviz
       - texlive-latex-base
+      - texlive-latex-recommended
 
 notifications:
   email: false
