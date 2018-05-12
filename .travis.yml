@@ -12,6 +12,7 @@ addons:
       - graphviz
       - texlive-latex-base
       - texlive-latex-recommended
+      - texlive-fonts-recommended
 
 notifications:
   email: false
