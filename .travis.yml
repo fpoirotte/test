@@ -13,6 +13,8 @@ addons:
       - texlive-latex-base
       - texlive-latex-recommended
       - texlive-fonts-recommended
+      - texlive-lang-french
+      - texlive-lang-english
 
 notifications:
   email: false
