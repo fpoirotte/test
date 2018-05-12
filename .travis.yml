@@ -27,11 +27,17 @@ script:
   - rm composer.lock
   - composer self-update -n
   - composer install -n
-  - export COMMIT_DESC=`git describe --exact 2>/dev/null || git rev-parse --abbrev-ref HEAD`
-  - cd docs/src/ && for lang in fr en; do for builder in html latex; do sphinx-build -T -E -b $builder -d ../_build/doctrees -D language=$lang . "../enduser/$builder/$lang/$COMMIT_DESC"; done; make -C ../enduser/latex/$lang/$COMMIT_DESC all-pdf < /dev/null; done
+  - export GHPAGES=`mktemp -d`
+  - export DEFAULT_BRANCH=`git symbolic-ref --short refs/remotes/origin/HEAD | cut -d/ -f2-`
+  - git clone --branch=gh-pages https://github.com/${TRAVIS_REPO_SLUG}.git "$GHPAGES/"
+  - rm -rf "$GHPAGES/.git"
+  - cd docs/src/ && for lang in fr en; do for builder in html latex; do rm -rf "$GHPAGES/refs/${TRAVIS_BRANCH}/$lang/$builder/"; sphinx-build -T -E -b $builder -d ../_build/doctrees -D language=$lang . "$GHPAGES/refs/${TRAVIS_BRANCH}/$lang/$builder"; done; make -C "$GHPAGES/${TRAVIS_BRANCH}/$lang/latex/" all-pdf < /dev/null; find "$GHPAGES/${TRAVIS_BRANCH}/$lang/latex/" ! -name "*.pdf"; done
+  - if [ -n "$TRAVIS_TAG" ]; then ln -sfT "${TRAVIS_BRANCH}" "$GHPAGES/stable"; else ln -sfT "${TRAVIS_BRANCH}" "$GHPAGES/latest"; fi
+  - touch "$GHPAGES/.nojekyll"
+  - printf "%s" '<html><head><meta http-equiv="refresh" content="0; url=latest/en/html/"/></head><body><script type="text/javascrupt">window.location.replace("latest/en/html/");</script></body></html>' > "$GHPAGES/index.html"
 
 deploy:
-  local-dir: docs/enduser/
+  local-dir: $GHPAGES
   provider: pages
   #repo: Erebot/erebot.github.io
   skip-cleanup: true
