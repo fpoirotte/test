@@ -18,13 +18,14 @@ php:
   - 7
 
 script:
-  - cd docs/src/ && sphinx-build -T -E -b html -d _build/doctrees -D language=en . _build/html
+  - cd docs/src/ && sphinx-build -T -E -b html -d ../_build/doctrees -D language=en . ../enduser/html
 
-#deploy:
-#  provider: pages
-#  skip-cleanup: true
-#  github-token: $GITHUB_TOKEN
-#  keep-history: true
-#  verbose: true
-#  on:
-#    branch: master
+deploy:
+  local-dir: docs/enduser/html
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  verbose: true
+  on:
+    branch: master
