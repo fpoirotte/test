@@ -1,0 +1,203 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2011-2016, Erebot
+# This file is distributed under the same license as the Erebot_Module_Admin package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Erebot_Module_Admin 1.0.x-dev\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-29 02:55+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/generic/Installation.rst:10
+msgid "Installation"
+msgstr ""
+
+#: ../src/generic/Installation.rst:12
+msgid "This pages contains instructions on how to install this module on your machine. There are several ways to achieve that. Each method is described below."
+msgstr ""
+
+#: ../src/generic/Installation.rst:17
+msgid "You cannot mix the different methods. Especially, **you must use the same method to install this module as the one you selected for Erebot itself**."
+msgstr ""
+
+#: ../src/generic/Installation.rst:0
+msgid "Contents"
+msgstr ""
+
+#: ../src/generic/Installation.rst:24
+msgid "We recommend that you install this module using either its :ref:`PHAR package <install_phar>` or through :ref:`composer <install_composer>`. Installation from sources is reserved for advanced installations (eg. Erebot developers)."
+msgstr ""
+
+#: ../src/generic/Installation.rst:34
+msgid "Installation using PHAR packages"
+msgstr ""
+
+#: ../src/generic/Installation.rst:36
+msgid "Installing |project| from a PHAR package is very easy. However, please note that Erebot must have been installed as a PHAR package for this method to work properly."
+msgstr ""
+
+#: ../src/generic/Installation.rst:43
+msgid "Preparations"
+msgstr ""
+
+#: ../src/generic/Installation.rst:45
+msgid "If you haven't done so already, create a directory in Erebot's folder named ``modules``."
+msgstr ""
+
+#: ../src/generic/Installation.rst:48
+msgid "Hence, your tree should look like this:"
+msgstr ""
+
+#: ../src/generic/Installation.rst:52
+msgid "Erebot/"
+msgstr ""
+
+#: ../src/generic/Installation.rst:51
+msgid "Erebot-X.Y.Z.phar"
+msgstr ""
+
+#: ../src/generic/Installation.rst:52
+msgid "modules/"
+msgstr ""
+
+#: ../src/generic/Installation.rst:54
+msgid "Also, make sure your installation fulfills all of the `prerequisites`_ for this module."
+msgstr ""
+
+#: ../src/generic/Installation.rst:58
+msgid "Downloading the package"
+msgstr ""
+
+#: ../src/generic/Installation.rst:60
+msgid "First, select the version you want to install. Available versions are listed on `Erebot's package repository`_."
+msgstr ""
+
+#: ../src/generic/Installation.rst:63
+msgid "The PHAR package for a certain version can be downloaded by using a URL such as |project_version| (replace `version` with the actual version you selected)."
+msgstr ""
+
+#: ../src/generic/Installation.rst:67
+msgid "As a special shortcut, the following link always points to the latest snapshot of |project|: |project_latest|."
+msgstr ""
+
+#: ../src/generic/Installation.rst:72
+msgid "Using the latest snapshot available means that you may benefit from very recent developments, but it also means that the code may be in an unstable state. Use at your own risk."
+msgstr ""
+
+#: ../src/generic/Installation.rst:76
+msgid "The PHAR package must be downloaded to your installation's :file:`modules/` directory."
+msgstr ""
+
+#: ../src/generic/Installation.rst:80
+msgid "Downloading the package's signature"
+msgstr ""
+
+#: ../src/generic/Installation.rst:82
+msgid "All the packages delivered by Erebot's developers are cryptographically signed using the \"OpenSSL\" algorithm in PHP's Phar extension. This signature is used to detect corrupted packages and packages that have been tampered with."
+msgstr ""
+
+#: ../src/generic/Installation.rst:87
+msgid "You must retrieve the signature corresponding to the version of the PHAR package you downloaded and put it alongside the package. The signature can be downloaded by appending ``.pubkey`` at the end of the link to the package itself. Therefore, the signature for the latest version can be downloaded from |project_latest_pubkey|."
+msgstr ""
+
+#: ../src/generic/Installation.rst:95
+msgid "PHP automatically checks the integrity of signed PHAR packages when they are loaded. Neither the name of the PHAR package nor the name of the signature file should be altered, as the integrity check would then fail."
+msgstr ""
+
+#: ../src/generic/Installation.rst:101
+msgid "Although PHP automatically checks the integrity of cryptographically signed phar archives when they are loaded using the signature file, you may also check an archive manually by using the :command:`phar` command provided with the phar extension."
+msgstr ""
+
+#: ../src/generic/Installation.rst:106
+msgid "For example, the following session shows a passing result."
+msgstr ""
+
+#: ../src/generic/Installation.rst:115
+msgid "Note how the \"Hash-type\" field indicates that the \"OpenSSL\" algorithm has been used to sign the archive. **Any other value should be considered as if the check had failed**, unless the package was downloaded from Erebot's website over a secure (SSL/TLS) connection."
+msgstr ""
+
+#: ../src/generic/Installation.rst:120
+msgid "On the other hand, the following example shows a session where the verification failed."
+msgstr ""
+
+#: ../src/generic/Installation.rst:130
+msgid "Conclusion"
+msgstr ""
+
+#: ../src/generic/Installation.rst:132
+msgid "Once the PHAR package and its signature have been downloaded, your installation should look somewhat like that:"
+msgstr ""
+
+#: ../src/generic/Installation.rst:143
+msgid "That's all folks! You may now add `configuration options`_ for this module in Erebot's configuration file."
+msgstr ""
+
+#: ../src/generic/Installation.rst:150
+msgid "Installation through Composer"
+msgstr ""
+
+#: ../src/generic/Installation.rst:152
+msgid "Installation through `Composer <http://getcomposer.org/>`_ is very easy. However, please note that Erebot itself must have been installed using Composer for this method to work properly."
+msgstr ""
+
+#: ../src/generic/Installation.rst:156
+msgid "To install the new module:"
+msgstr ""
+
+#: ../src/generic/Installation.rst:158
+msgid "Go to the directory where you installed Erebot."
+msgstr ""
+
+#: ../src/generic/Installation.rst:159
+msgid "Add this module to your installation's dependencies with:"
+msgstr ""
+
+#: ../src/generic/Installation.rst:166
+#: ../src/generic/Installation.rst:202
+msgid "You may now add `configuration options`_ for this module in Erebot's configuration file."
+msgstr ""
+
+#: ../src/generic/Installation.rst:171
+msgid "Installation from source"
+msgstr ""
+
+#: ../src/generic/Installation.rst:173
+msgid "Please note that Erebot itself must have been installed from source for this method to work."
+msgstr ""
+
+#: ../src/generic/Installation.rst:178
+msgid "This method exists only for the sake of running Erebot on the now deprecated PHP 5.2.x. Also, please note that depending on your environment, other actions than the ones described here may be required to make this module work properly."
+msgstr ""
+
+#: ../src/generic/Installation.rst:182
+msgid "First, make sure the git client is installed on your machine."
+msgstr ""
+
+#: ../src/generic/Installation_git.inc:1
+msgid "Under Linux, **from a root shell**, run the command that most closely matches the tools provided for your distribution:"
+msgstr ""
+
+#: ../src/generic/Installation_git.inc:17
+msgid "Windows users may be interested in installing `Git for Windows`_ to get an equivalent git client. Also, make sure that the path to :file:`git.exe` is present on your account's :envvar:`PATH`. Otherwise, you'll have to replace :command:`git` by the full path to :file:`git.exe` on every invocation. Eg. :"
+msgstr ""
+
+#: ../src/generic/Installation_git.inc:23
+msgid ":samp:`\"{C:\\\\Program Files\\\\Git\\\\bin\\\\}git.exe\" clone ...`"
+msgstr ""
+
+#: ../src/generic/Installation.rst:186
+msgid "Now, clone the module's repository:"
+msgstr ""
+
+#: ../src/generic/Installation.rst:194
+msgid "Last but not least, install the rest of this module's `prerequisites`_ and then run:"
+msgstr ""
+

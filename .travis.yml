@@ -1,120 +1,29 @@
-language: python
+language: php
 sudo: false
 dist: trusty
 
-addons:
-  apt:
-    packages:
-      # We install system tools and Python modules
-      # that rely on compiled code manually
-      - rrdtool
-      - libxml2-utils
-      - librrd-dev
-      - python-rrdtool
-      - python-lxml
-      - python-psycopg2
-      - python-openssl
+#addons:
+#  apt:
+#    packages:
+#      - python-openssl
 
 notifications:
   email: false
 
-python:
-  - 2.6
-  - 2.7
-  - 3.2
-  - 3.3
-  - 3.4
-  - 3.5
-  - 3.6
-
-env:
-  global:
-    - PYTHONPATH="../common/src:../connector/src:../models/src:../turbogears/src:../themes-default/src:../connector-metro/src:../connector-nagios/src:../connector-syncevents/src:../correlator/src:../vigiboard/vigiboard:../vigigraph/vigigraph:../vigirrd/vigirrd:../vigiconf/src:../vigiconf-local/src"
-    - MODULES="common connector models themes-default turbogears connector-metro connector-nagios connector-syncevents correlator vigiboard vigigraph vigirrd vigiconf vigiconf-local"
-    - SYSCONFDIR="/tmp/vigilo/etc"
-    - LOCALSTATEDIR="/tmp/vigilo/var"
-    - VIGILO_SETTINGS="./settings_tests.ini"
-
-before_script:
-  # Make sure we use the latest commits
-  - git submodule update --remote
-
-  - mkdir -p deps
-  - cd deps
-  - pip download repoze.who-testutil
-  - pip download repoze.who-friendlyform
-  - tar xavf repoze.who-testutil-1.0.1.tar.gz
-  - tar xavf repoze.who-friendlyform-1.0.8.tar.gz
-  - wget https://bootstrap.pypa.io/ez_setup.py
-  - cp -f ez_setup.py repoze.who-testutil-1.0.1/
-  - cp -f ez_setup.py repoze.who-friendlyform-1.0.8/
-  - cd repoze.who-testutil-1.0.1/ && pip install . && ..
-  - cd repoze.who-friendlyform-1.0.8/ && pip install . && ..
-  - cd ..
-
-  # Create a new file hierarchy to avoid permission issues on /etc, /var, and so on
-  - mkdir -p /tmp/vigilo/etc /tmp/vigilo/var /tmp/vigilo/usr/share/locale
-
-  # Fake the instantiation of template files (we just copy them as-is)
-  # TurboGears bridge
-  - cp vigilo/turbogears/pkg/vigilo-clean-turbogears-sessions.sh.in vigilo/turbogears/pkg/vigilo-clean-turbogears-sessions.sh
-  # Connectors
-  - cp vigilo/connector-metro/settings.ini.in                       vigilo/connector-metro/settings.ini
-  - cp vigilo/connector-nagios/settings.ini.in                      vigilo/connector-nagios/settings.ini
-  - cp vigilo/connector-syncevents/pkg/cronjobs.in                  vigilo/connector-syncevents/pkg/vigilo-connector-syncevents.cron
-  # VigiRules
-  - cp vigilo/correlator/settings.ini.in                            vigilo/correlator/settings.ini
-  # VigiConf
-  - cp vigilo/vigiconf/settings.ini.in                              vigilo/vigiconf/settings.ini
-  - cp vigilo/vigiconf/pkg/cronjobs.in                              vigilo/vigiconf/pkg/vigilo-vigiconf.cron
-  - cp vigilo/vigiconf-local/settings-local.ini.in                  vigilo/vigiconf-local/settings-local.ini
-  # VigiBoard
-  - cp vigilo/vigiboard/pkg/vigilo-vigiboard.sh.in                  vigilo/vigiboard/pkg/vigilo-vigiboard.sh
-  - cp vigilo/vigiboard/deployment/logrotate.conf.in                vigilo/vigiboard/deployment/logrotate.conf
-  - cp vigilo/vigiboard/deployment/settings.ini.in                  vigilo/vigiboard/deployment/settings.ini
-  - cp vigilo/vigiboard/deployment/vigiboard.conf.in                vigilo/vigiboard/deployment/vigiboard.conf
-  - cp vigilo/vigiboard/deployment/vigiboard.wsgi.in                vigilo/vigiboard/deployment/vigiboard.wsgi
-  # VigiGraph
-  - cp vigilo/vigigraph/deployment/logrotate.conf.in                vigilo/vigigraph/deployment/logrotate.conf
-  - cp vigilo/vigigraph/deployment/settings.ini.in                  vigilo/vigigraph/deployment/settings.ini
-  - cp vigilo/vigigraph/deployment/vigigraph.conf.in                vigilo/vigigraph/deployment/vigigraph.conf
-  - cp vigilo/vigigraph/deployment/vigigraph.wsgi.in                vigilo/vigigraph/deployment/vigigraph.wsgi
-  # VigiRRD
-  - cp vigilo/vigirrd/deployment/logrotate.conf.in                  vigilo/vigirrd/deployment/logrotate.conf
-  - cp vigilo/vigirrd/deployment/settings.ini.in                    vigilo/vigirrd/deployment/settings.ini
-  - cp vigilo/vigirrd/deployment/vigirrd.conf.in                    vigilo/vigirrd/deployment/vigirrd.conf
-  - cp vigilo/vigirrd/deployment/vigirrd.wsgi.in                    vigilo/vigirrd/deployment/vigirrd.wsgi
-  - cp vigilo/vigirrd/deployment/cronjobs.in                        vigilo/vigirrd/deployment/vigirrd.cron
-
-  # Apply patches
-  - export PYTHON_SITELIB=`python -c 'from distutils.sysconfig import get_python_lib; print get_python_lib()'`
-  - patch -d "$PYTHON_SITELIB" -p0 < vigilo/common/patches/001-configobj-semicolon_for_comments.diff
-  #- patch -d "$PYTHON_SITELIB" -p1 < vigilo/turbogears/patches/003_paste-deploy_SafeConfigParser.diff
-
-  # Replace py-rrdtool with python-rrdtool in VigiRRD
-  # to account for distribution specificities
-  - sed -i 's/py-rrdtool/python-rrdtool/' vigilo/vigirrd/setup.py
-
-  # Install the modules so that they are properly registered on the system
-  # We do not install VigiRRD that way because it looks for an unsatisfiable
-  # requirement called "py-rrdtool" (instead of "python-rrdtool")
-  - for m in $MODULES; do cd vigilo/$m; pip install .; cd ../..; done
-
-  # Compile the translation catalogs
-  - for m in $MODULES; do cd vigilo/$m; python setup.py compile_catalog || /bin/true; cd ../..; done
+php:
+  - 7
 
 script:
-  - cd vigilo/common
-  - cd ../common               && nosetests
-  - cd ../connector            && nosetests
-  - cd ../models               && nosetests
-  - cd ../turbogears           && nosetests
-  - cd ../connector-metro      && nosetests
-  - cd ../connector-nagios     && nosetests
-  - cd ../connector-syncevents && nosetests
-  - cd ../correlator           && nosetests
-  - cd ../vigiboard            && nosetests
-  - cd ../vigigraph            && nosetests
-  - cd ../vigirrd              && nosetests
-  - cd ../vigiconf             && nosetests
-  - cd ../vigiconf-local       && nosetests
+  - /bin/true
+
+after_success:
+  - cd docs/src/ sphinx-build -T -E -b html -d _build/doctrees -D language=en . _build/html
+
+#deploy:
+#  provider: pages
+#  skip-cleanup: true
+#  github-token: $GITHUB_TOKEN
+#  keep-history: true
+#  verbose: true
+#  on:
+#    branch: master
