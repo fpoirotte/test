@@ -34,7 +34,7 @@ script:
   - cd docs/src/ && for lang in fr en; do for builder in html latex; do rm -rf "$GHPAGES/refs/${TRAVIS_BRANCH}/$lang/$builder/"; sphinx-build -T -E -b $builder -d ../_build/doctrees -D language=$lang . "$GHPAGES/refs/${TRAVIS_BRANCH}/$lang/$builder"; done; make -C "$GHPAGES/${TRAVIS_BRANCH}/$lang/latex/" all-pdf < /dev/null; find "$GHPAGES/${TRAVIS_BRANCH}/$lang/latex/" ! -name "*.pdf"; done
   - if [ -n "$TRAVIS_TAG" ]; then ln -sfT "${TRAVIS_BRANCH}" "$GHPAGES/stable"; else ln -sfT "${TRAVIS_BRANCH}" "$GHPAGES/latest"; fi
   - touch "$GHPAGES/.nojekyll"
-  - printf "%s" '<html><head><meta http-equiv="refresh" content="0; url=latest/en/html/"/></head><body><script type="text/javascrupt">window.location.replace("latest/en/html/");</script></body></html>' > "$GHPAGES/index.html"
+  - printf "%s" '<html><head><meta http-equiv="refresh" content="0; url=latest/en/html/"/></head><body onload="window.location.replace('"'"'latest/en/html/'"'"');"></body></html>' > "$GHPAGES/index.html"
 
 deploy:
   local-dir: $GHPAGES
