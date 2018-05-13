@@ -33,9 +33,10 @@ class TemplateLoader(BuiltinTemplateLoader):
 <script type="text/javascript">
 var erebot = '%(overlay)s';
 </script>
-<script type="text/javascript" src="%(path)s../../../../erebot-overlay.js"></script>
+<script type="text/javascript" src="%(base)s../../../../erebot-overlay.js"></script>
 </body>""" % {
                 'id': self.piwik_site,
+                'base': context['pathto']('./', 1),
                 'overlay': json.dumps(overlay),
             })
         return res
