@@ -73,6 +73,7 @@ def prepare(globs, locs):
     if project.endswith('.git'):
         project = project[:-4]
     os.environ['SPHINX_PROJECT'] = project
+    os.environ['SPHINX_PROJECT_SLUG'] = ("%s/%s" % (vendor, project)).lower()
     if git_tag:
         os.environ['SPHINX_VERSION'] = git_tag
         os.environ['SPHINX_RELEASE'] = git_tag

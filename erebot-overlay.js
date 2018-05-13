@@ -1,6 +1,4 @@
 (function () {
-  var cur_language = 'en';
-  var cur_version = 'latest';
   var languages = ''; //languages//;
   var versions = '';  //versions//;
 
@@ -115,7 +113,7 @@
   $("body").append( `
 <div id="erebot-overlay">
   <div id="erebot-overlay-title">
-    <span>Settings (<span class="erebot-overlay-active">${cur_language}, ${cur_version}</span>)</span>
+    <span>Settings (<span class="erebot-overlay-active">${erebot_language}, ${erebot_version}</span>)</span>
     <span id="erebot-overlay-icon"><a>&#9881;</a></span>
     <span class="erebot-overlay-toggle"><a>&#9650;</a></span>
     <span class="erebot-overlay-toggle"><a>&#9660;</a></span>
