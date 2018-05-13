@@ -53,6 +53,7 @@
         case 'stable':
           code_versions += ` <a data-value="${versions[ver]}" href="${erebot.base}../../../../aliases/${versions[ver]}/${erebot.language}/${erebot.builder}">${versions[ver]}</a>`;
       }
+    }
     more_versions += '</div>';
     code_versions = more_versions + code_versions;
   }
