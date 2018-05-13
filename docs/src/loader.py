@@ -6,6 +6,7 @@ class TemplateLoader(BuiltinTemplateLoader):
         self.piwik_site = builder.config.html_context.get('piwik_site', 0)
         self.language = builder.config.language
         self.builder_name = builder.name
+        self.suffix = builder.config.source_suffix
         return super(TemplateLoader, self).init(builder, theme, dirs)
 
     def render(self, template, context):
@@ -35,6 +36,7 @@ var erebot_suffix = '%(suffix)s';
             'slug': os.environ['SPHINX_PROJECT_SLUG'],
             'builder': self.builder_name,
             'language': self.language,
+            'suffix': self.suffix,
         })
         return res
 
