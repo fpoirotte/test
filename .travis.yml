@@ -27,6 +27,7 @@ script:
   - rm composer.lock
   - composer self-update -n
   - composer install -n
+  - if [ -n "$TRAVIS_PULL_REQUEST_SLUG" ]; then exit 1; fi
   - export GHPAGES=`mktemp -d -p "docs/"`
   - export DEFAULT_BRANCH=`git symbolic-ref --short refs/remotes/origin/HEAD | cut -d/ -f2-`
   - git clone --branch=gh-pages https://github.com/${TRAVIS_REPO_SLUG}.git "$GHPAGES/"
@@ -45,7 +46,7 @@ deploy:
   #repo: Erebot/erebot.github.io
   skip-cleanup: true
   github-token: $GITHUB_TOKEN
-  keep-history: true
+  #keep-history: true
   verbose: true
   on:
     branch: master
