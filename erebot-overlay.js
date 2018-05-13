@@ -73,7 +73,7 @@
     text-decoration: none;
     margin-right: 0.5em;
     font-family: monospace;
-    font-size: 125%:
+    font-size: 125%;
     margin: 0.5em;
 }
 
