@@ -46,9 +46,9 @@ script:
 
 before_deploy:
   # Glue
-  - mkdir -p "$GHPAGES/${TRAVIS_REPO_SLUG}/aliases"
-  - if [ -n "$TRAVIS_TAG" ]; then ln -sfT "../refs/${TRAVIS_BRANCH}" "$GHPAGES/${TRAVIS_REPO_SLUG}/aliases/stable"; fi
-  - ln -sfT "../refs/${TRAVIS_BRANCH}" "$GHPAGES/${TRAVIS_REPO_SLUG}/aliases/latest"
+  - mkdir -p "$GHPAGES/${TRAVIS_REPO_SLUG}/aliases" "$GHPAGES/${TRAVIS_REPO_SLUG}/refs"
+  - if [ -n "$TRAVIS_TAG" ] && [ -d "$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}" ]; then ln -sfT "../refs/${TRAVIS_BRANCH}" "$GHPAGES/${TRAVIS_REPO_SLUG}/aliases/stable"; fi
+  - if [ -d "$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}" ]; then ln -sfT "../refs/${TRAVIS_BRANCH}" "$GHPAGES/${TRAVIS_REPO_SLUG}/aliases/latest"; fi
   - printf "%s" '<html><head><meta http-equiv="refresh" content="0; url=aliases/latest/en/html/"/></head><body onload="window.location.replace('"'"'aliases/latest/en/html/'"'"');"></body></html>' > "$GHPAGES/${TRAVIS_REPO_SLUG}/index.html"
   - export DOC_VERSIONS="$(cd "$GHPAGES/${TRAVIS_REPO_SLUG}"; find aliases/ refs/ -mindepth 1 -maxdepth 1 '(' -type d -o -type l ')' -printf '%f '))"
   - if [ -d "$GHPAGES/${TRAVIS_REPO_SLUG}/html/" ]; then sed -e "s^//languages//^languages = '${DOC_LANGUAGES}'^" -e "s^//versions//^versions = '${DOC_VERSIONS}'^" "$GHPAGES/erebot-overlay.js" > "$GHPAGES/${TRAVIS_REPO_SLUG}/html/erebot-overlay.js"; fi
