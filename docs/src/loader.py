@@ -31,7 +31,7 @@ class TemplateLoader(BuiltinTemplateLoader):
                 """
 <!-- Custom overlay -->
 <script type="text/javascript">
-var erebot = '%(overlay)s';
+var erebot = %(overlay)s;
 </script>
 <script type="text/javascript" src="%(base)s../../../../erebot-overlay.js"></script>
 </body>""" % {
