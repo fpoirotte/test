@@ -28,30 +28,31 @@
   var code_languages = '';
   languages = languages.split(/\s+/).filter(not_empty).sort();
   for (var lang in languages) {
-    code_languages += ` <a data-value="${languages[lang]}" href="/">${languages[lang]}</a>`
+    code_languages += ` <a data-value="${languages[lang]}" href="${erebot.base}../../${languages[lang]}/${erebot.builder}">${languages[lang]}</a>`
   }
 
   var code_versions = '';
-  var has_latest = false;
-  var has_stable = false;
+  var has_aliases = false;
   versions = versions.split(/\s+/).filter(not_empty).sort(natsort);
   for (var ver in versions) {
     switch (versions[ver]) {
       case 'latest':
-        has_latest = true;
-        break;
       case 'stable':
-        has_stable = true;
+        has_aliases = true;
         break;
       default:
-        code_versions += ` <a data-value="${versions[ver]}" href="/">${versions[ver]}</a>`;
+        code_versions += ` <a data-value="${versions[ver]}" href="${erebot.base}../../../../refs/${versions[ver]}/${erebot.language}/${erebot.builder}">${versions[ver]}</a>`;
     }
   }
 
-  if (has_stable || has_latest) {
+  if (has_aliases) {
     var more_versions = '<div>';
-    if (has_latest) more_versions += ' <a data-value="latest" href="/">latest</a>'
-    if (has_stable) more_versions += ' <a data-value="stable" href="/">stable</a>'
+    for (var ver in versions) {
+      switch (versions[ver]) {
+        case 'latest':
+        case 'stable':
+          code_versions += ` <a data-value="${versions[ver]}" href="${erebot.base}../../../../aliases/${versions[ver]}/${erebot.language}/${erebot.builder}">${versions[ver]}</a>`;
+      }
     more_versions += '</div>';
     code_versions = more_versions + code_versions;
   }
@@ -156,28 +157,28 @@
     <div>
       <div>Formats:</div>
       <div>
-        <a class="eo-active" href="/">HTML</a>
-        <a href="/">PDF</a>
+        <a class="eo-active" href="${erebot.base}">HTML</a>
+        <a href="${erebot.base}../latex/${erebot.project.name}.pdf">PDF</a>
       </div>
     </div>
     <div>
       <div>Contribute:</div>
       <div>
-        <a href="/">Edit</a>
-        <a href="/">Translate</a>
+        <a href="https://github.com/${erebot.project.slug}/edit/${erebot.default_branch}/docs/src/${erebot.page}${erebot.source_suffix}">Edit</a>
+        <a href="https://www.transifex.com/Erebot/">Translate</a>
       </div>
     </div>
     <div>
       <div>
         Search
-        <form action="" method="GET" target="_blank">
+        <form action="${erebot.base}search.html" method="GET" target="_blank">
           <input name="q" placeholder="Search in the docs"/>
         </form>
         </div>
     </div>
   </div>
   <div id="eo-title" title="Click to open/close the toolbox">
-    <span class="eo-active">${erebot_version} (${erebot_language})</span>
+    <span class="eo-active">${erebot.project.version} (${erebot.language})</span>
     <span id="eo-icon"><a>&#9881;</a></span>
     <span class="eo-toggle eo-arrow"><a>&#9660;</a></span>
     <span class="eo-toggle eo-arrow"><a>&#9650;</a></span>
@@ -190,6 +191,6 @@
     $(this).toggleClass("eo-opened");
   });
 
-  $('#eo-languages a[data-value="' + erebot_language + '"]').addClass("eo-active");
-  $('#eo-versions a[data-value="' + erebot_version + '"]').addClass("eo-active");
+  $('#eo-languages a[data-value="' + erebot.language + '"]').addClass("eo-active");
+  $('#eo-versions a[data-value="' + erebot.project.version + '"]').addClass("eo-active");
 })();

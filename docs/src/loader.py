@@ -1,4 +1,5 @@
 import os
+import json
 from sphinx.jinja2glue import BuiltinTemplateLoader
 
 class TemplateLoader(BuiltinTemplateLoader):
@@ -12,30 +13,30 @@ class TemplateLoader(BuiltinTemplateLoader):
     def render(self, template, context):
         res = super(TemplateLoader, self).render(template, context)
         if template == 'page.html':
+            overlay = {
+                'base': context['pathto']('./', 1),
+                'page': context['pagename'],
+                'project': {
+                    'name': context['project'],
+                    'slug': os.environ['SPHINX_PROJECT_SLUG'],
+                    'version': context['version'],
+                },
+                'default_branch': os.environ['SPHINX_DEFAULT_BRANCH'],
+                'builder': self.builder_name,
+                'language': self.language,
+                'source_suffix': self.suffix,
+            }
             res = res.replace(
                 '</body>',
                 """
 <!-- Custom overlay -->
 <script type="text/javascript">
-var erebot_language = '%(language)s';
-var erebot_version = '%(version)s';
-var erebot_page = '%(page)s';
-var erebot_slug = '%(slug)s';
-var erebot_base = '%(path)s';
-var erebot_builder = '%(builder)s';
-var erebot_suffix = '%(suffix)s';
+var erebot = '%(overlay)s';
 </script>
-<script type="text/javascript" src="%(path)s../erebot-overlay.js"></script>
+<script type="text/javascript" src="%(path)s../../../../erebot-overlay.js"></script>
 </body>""" % {
-            'id': self.piwik_site,
-            'path': context['pathto']('../../../', 1),
-            'page': context['pagename'],
-            'version': context['version'],
-            'project': context['project'],
-            'slug': os.environ['SPHINX_PROJECT_SLUG'],
-            'builder': self.builder_name,
-            'language': self.language,
-            'suffix': self.suffix,
-        })
+                'id': self.piwik_site,
+                'overlay': json.dumps(overlay),
+            })
         return res
 

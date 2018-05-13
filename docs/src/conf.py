@@ -66,14 +66,18 @@ def prepare(globs, locs):
                     stdout=PIPE).communicate()[0].strip()
     git_hash = Popen([git, 'rev-parse', 'HEAD'],
                     stdout=PIPE).communicate()[0].strip()
+    git_default = Popen([git, 'symbolic-ref', '--short', 'refs/remotes/origin/HEAD'],
+                    stdout=PIPE).communicate()[0].strip()
 
     origin = origin.replace(':', '/').split('/')
     vendor = origin[-2]
     project = origin[-1]
+    default_branch = git_default.split('/', 1)[-1]
     if project.endswith('.git'):
         project = project[:-4]
     os.environ['SPHINX_PROJECT'] = project
     os.environ['SPHINX_PROJECT_SLUG'] = ("%s/%s" % (vendor, project)).lower()
+    os.environ['SPHINX_DEFAULT_BRANCH'] = default_branch
     if git_tag:
         os.environ['SPHINX_VERSION'] = git_tag
         os.environ['SPHINX_RELEASE'] = git_tag
