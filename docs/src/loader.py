@@ -12,7 +12,7 @@ class TemplateLoader(BuiltinTemplateLoader):
                 '</body>',
                 """
 <!-- Custom overlay -->
-<script type="text/javascript" src="_static/erebot-overlay.js"></script>
-</body>""" % {'id': self.piwik_site})
+<script type="text/javascript" src="%(path)s"></script>
+</body>""" % {'id': self.piwik_site, 'path': ctx['pathto']('../../erebot-overlay.js', 1)})
         return res
 

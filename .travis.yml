@@ -25,22 +25,31 @@ php:
   - 7
 
 script:
+  # Install
   - rm composer.lock
   - composer self-update -n
   - composer install -n
+  # Environment
   - if [ -n "$TRAVIS_PULL_REQUEST_SLUG" ]; then exit 1; fi
   - export GHPAGES=`mktemp -d -p "docs/"`
   - export DEFAULT_BRANCH=`git symbolic-ref --short refs/remotes/origin/HEAD | cut -d/ -f2-`
+  - export DOC_LANGUAGES="$(ls -1 docs/src/i18n/)"
+  # Preparations
   - git clone --branch=gh-pages https://github.com/${TRAVIS_REPO_SLUG}.git "$GHPAGES/"
   - rm -rf "$GHPAGES/.git"
-  - rm -rf "$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}"
-  - cd docs/src/
-  - for lang in $(ls -1 ../i18n/); do for builder in html latex; do sphinx-build -T -E -b $builder -d ../_build/doctrees -D language=$lang . "../../$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}/$lang/$builder"; done; make -C "../../$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}/$lang/latex/" all-pdf < /dev/null; find "../../$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}/$lang/latex/" ! -name "*.pdf"; done
-  - cd ../..
-  - if [ -n "$TRAVIS_TAG" ]; then ln -sfT "refs/${TRAVIS_BRANCH}" "$GHPAGES/${TRAVIS_REPO_SLUG}/stable"; fi
-  - ln -sfT "refs/${TRAVIS_BRANCH}" "$GHPAGES/${TRAVIS_REPO_SLUG}/latest"
   - touch "$GHPAGES/.nojekyll"
-  - printf "%s" '<html><head><meta http-equiv="refresh" content="0; url=latest/en/html/"/></head><body onload="window.location.replace('"'"'latest/en/html/'"'"');"></body></html>' > "$GHPAGES/${TRAVIS_REPO_SLUG}/index.html"
+  - rm -rf "$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}"
+  # Building
+  - cd docs/src/
+  - for lang in $DOC_LANGUAGES; do for builder in html latex; do sphinx-build -T -E -b $builder -d ../_build/doctrees -D language=$lang . "../../$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}/$lang/$builder"; done; make -C "../../$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}/$lang/latex/" all-pdf < /dev/null; find "../../$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}/$lang/latex/" ! -name "*.pdf"; done || /bin/true
+  - cd ../..
+  # Glue
+  - mkdir -p "$GHPAGES/${TRAVIS_REPO_SLUG}/aliases"
+  - if [ -n "$TRAVIS_TAG" ]; then ln -sfT "../refs/${TRAVIS_BRANCH}" "$GHPAGES/${TRAVIS_REPO_SLUG}/aliases/stable"; fi
+  - ln -sfT "../refs/${TRAVIS_BRANCH}" "$GHPAGES/${TRAVIS_REPO_SLUG}/aliases/latest"
+  - printf "%s" '<html><head><meta http-equiv="refresh" content="0; url=aliases/latest/en/html/"/></head><body onload="window.location.replace('"'"'aliases/latest/en/html/'"'"');"></body></html>' > "$GHPAGES/${TRAVIS_REPO_SLUG}/index.html"
+  - export DOC_VERSIONS="$(cd "$GHPAGES/${TRAVIS_REPO_SLUG}"; find aliases/ refs/ -mindepth 1 -maxdepth 1 '(' -type d -o -type l ')' -printf '%f '))"
+  - if [ -d "$GHPAGES/${TRAVIS_REPO_SLUG}/html/" ]; then sed -e "s^//languages//^languages = '${DOC_LANGUAGES}'^" -e "s^//versions//^versions = '${DOC_VERSIONS}'^" "$GHPAGES/erebot-overlay.js" > "$GHPAGES/${TRAVIS_REPO_SLUG}/html/erebot-overlay.js"; fi
 
 deploy:
   local-dir: $GHPAGES
