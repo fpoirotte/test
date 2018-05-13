@@ -8,13 +8,17 @@ class TemplateLoader(BuiltinTemplateLoader):
     def render(self, template, context):
         res = super(TemplateLoader, self).render(template, context)
         if template == 'page.html':
+            raise ValueError(repr(context))
             res = res.replace(
                 '</body>',
                 """
 <!-- Custom overlay -->
-<script type="text/javascript"></script>
+<script type="text/javascript">
+var erebot_language = '%(language)s';
+var erebot_version = '%(version)s';
+var erebot_page = '%(page)s';
+</script>
 <script type="text/javascript" src="%(path)s"></script>
 </body>""" % {'id': self.piwik_site, 'path': context['pathto']('../../../../erebot-overlay.js', 1)})
-        raise ValueError(repr(context.__dict__))
         return res
 
