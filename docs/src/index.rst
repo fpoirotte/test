@@ -9,6 +9,7 @@ Contents:
 ..  toctree::
     :maxdepth: 2
 
+    foo/index
 
 
 Current status on http://travis-ci.org/: |travis|

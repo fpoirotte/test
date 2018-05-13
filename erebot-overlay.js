@@ -2,24 +2,41 @@
   var languages = ''; //languages//;
   var versions = '';  //versions//;
 
-  var code_lang = '';
-  var code_ver = '';
-  var has_latest = false;
-  var has_stable = false;
+  var not_empty = function (v) { return v !== ''; };
+  var natsort = function (a, b) {
+    var convert = function (v, i) { return jQuery.isNumeric(v) ? parseInt(v) : v; };
+    var ka = jQuery.map(a.split(/(\d+)/).filter(not_empty), convert);
+    var kb = jQuery.map(b.split(/(\d+)/).filter(not_empty), convert);
+    var la = ka.length, lb = kb.length;
+    for (var i = 0, m = Math.max(la, lb); i < m; i++) {
+      if (i >= la) { return -1; }
+      if (i >= lb) { return 1; }
 
-  languages = languages.split(/\s+/).sort();
-  for (var lang in languages) {
-    if (languages[lang] === '') {
-      continue;
+      var ta = typeof(ka[i]), tb = typeof(kb[i]);
+      if (ta == tb) {
+        if (ka[i] != kb[i]) {
+          return (ta == 'string') ? ka[i].localeCompare(kb[i]) : ka[i] - kb[i];
+        }
+      } else {
+        var r = ka[i].toString().localeCompare(kb[i].toString());
+        return (r != 0) ? r : ta.localeCompare(tb);
+      }
     }
-    code_lang += ` <a data-value="${languages[lang]}" href="/">${languages[lang]}</a>`
+    return 0;
+  };
+
+  var code_languages = '';
+  languages = languages.split(/\s+/).filter(not_empty).sort();
+  for (var lang in languages) {
+    code_languages += ` <a data-value="${languages[lang]}" href="/">${languages[lang]}</a>`
   }
 
-  versions = versions.split(/\s+/).sort();
+  var code_versions = '';
+  var has_latest = false;
+  var has_stable = false;
+  versions = versions.split(/\s+/).filter(not_empty).sort(natsort);
   for (var ver in versions) {
     switch (versions[ver]) {
-      case '':
-        break;
       case 'latest':
         has_latest = true;
         break;
@@ -27,110 +44,119 @@
         has_stable = true;
         break;
       default:
-        code_ver += ` <a data-value="${versions[ver]}" href="/">${versions[ver]}</a>`;
+        code_versions += ` <a data-value="${versions[ver]}" href="/">${versions[ver]}</a>`;
     }
   }
 
   if (has_stable || has_latest) {
-    var more_code_ver = '<div>';
-    if (has_latest) more_code_ver += ' <a data-value="latest" href="/">latest</a>'
-    if (has_stable) more_code_ver += ' <a data-value="stable" href="/">stable</a>'
-    more_code_ver += '</div>';
-    code_ver = more_code_ver + code_ver;
+    var more_versions = '<div>';
+    if (has_latest) more_versions += ' <a data-value="latest" href="/">latest</a>'
+    if (has_stable) more_versions += ' <a data-value="stable" href="/">stable</a>'
+    more_versions += '</div>';
+    code_versions = more_versions + code_versions;
   }
 
   $("head").append( `
 <style type="text/css">
-#erebot-overlay {
+#eo {
+    line-height: 1;
     background-color: #224;
     color: #99F;
     position: fixed;
-    top: 0;
-    left: 50%;
-    margin: 0 0 0 -20%;
-    width: 40%;
+    bottom: 0;
+    right: 0;
 }
 
-#erebot-overlay a {
+#eo a {
     color: #FFF;
     text-decoration: none;
     margin-right: 0.5em;
+    font-family: monospace;
+    font-size: 125%:
+    margin: 0.5em;
 }
 
-#erebot-overlay .erebot-overlay-active {
+#eo .eo-active {
     color: #0FF;
 }
 
-#erebot-overlay-title {
+#eo-title {
     text-align: center;
     font-weight: bolder;
     padding: 0.25em;
+    padding-bottom: 0.5em;
     cursor: pointer;
 }
 
-#erebot-overlay-title #erebot-overlay-icon {
+#eo-title #eo-icon {
     float: left;
     margin-left: 0.25em;
 }
 
-#erebot-overlay-title > span {
-    margin-left: 1em;
-}
-
-#erebot-overlay-panel {
+#eo-panel {
     color: #BBC;
-    margin-top: 10px;
+    margin-bottom: 0;
     padding: 0.5em;
-    border-top: 1px solid #666;
+    border-bottom: 1px solid #666;
     display: none;
+    width: 20em;
 }
 
-#erebot-overlay-panel > div {
+#eo-panel > div {
     display: flex;
     font-weight: bold;
     margin: 0.5em 0;
 }
 
-#erebot-overlay-panel > div > div {
+#eo-panel > div > div {
     flex: 50%;
 }
 
-#erebot-overlay-panel input {
-	margin-top: 1em;
-    width: 95%;
+#eo-panel input {
+    margin-top: 1em;
+    width: 94%;
 }
 
-.erebot-overlay-toggle {
+.eo-toggle {
     display: none;
 }
 
-.erebot-overlay-toggle:last-child {
+.eo-toggle:last-child {
     display: inline;
+}
+
+.eo-arrow {
+    float: right;
+    position: relative;
+    top: -0.1em;
+}
+
+#eo .eo-arrow a {
+    margin: -0.5em 0 0.5em 0.5em;
+}
+
+#eo-title.eo-opened .eo-active::before {
+    content: 'Showing: ';
+    color: #99F;
 }
 </style>
 ` );
 
   $("body").append( `
-<div id="erebot-overlay">
-  <div id="erebot-overlay-title">
-    <span>Settings (<span class="erebot-overlay-active">${erebot_language}, ${erebot_version}</span>)</span>
-    <span id="erebot-overlay-icon"><a>&#9881;</a></span>
-    <span class="erebot-overlay-toggle"><a>&#9650;</a></span>
-    <span class="erebot-overlay-toggle"><a>&#9660;</a></span>
-  </div>
-  <div id="erebot-overlay-panel" class="erebot-overlay-toggle">
+<div id="eo">
+  <div id="eo-panel" class="eo-toggle">
     <div>
       <div>Languages:</div>
-      <div id="erebot-overlay-languages">${code_lang}</div>
+      <div id="eo-languages">${code_languages}</div>
     </div>
     <div>
       <div>Versions:</div>
-      <div id="erebot-overlay-versions">${code_ver}</div>
+      <div id="eo-versions">${code_versions}</div>
     </div>
     <div>
       <div>Formats:</div>
       <div>
-        <a class="erebot-overlay-active" href="/">HTML</a>
+        <a class="eo-active" href="/">HTML</a>
         <a href="/">PDF</a>
       </div>
     </div>
@@ -142,7 +168,7 @@
       </div>
     </div>
     <div>
-    	<div>
+      <div>
         Search
         <form action="" method="GET" target="_blank">
           <input name="q" placeholder="Search in the docs"/>
@@ -150,13 +176,20 @@
         </div>
     </div>
   </div>
+  <div id="eo-title" title="Click to open/close the toolbox">
+    <span class="eo-active">${erebot_version} (${erebot_language})</span>
+    <span id="eo-icon"><a>&#9881;</a></span>
+    <span class="eo-toggle eo-arrow"><a>&#9660;</a></span>
+    <span class="eo-toggle eo-arrow"><a>&#9650;</a></span>
+  </div>
 </div>
 ` );
 
-  $("#erebot-overlay-title").on("click", function () {
-    $(".erebot-overlay-toggle").toggle();
+  $("#eo-title").on("click", function () {
+    $(".eo-toggle").toggle();
+    $(this).toggleClass("eo-opened");
   });
 
-  $('#erebot-overlay-languages a[data-value="' + cur_language + '"]').addClass("erebot-overlay-active");
-  $('#erebot-overlay-versions a[data-value="' + cur_version + '"]').addClass("erebot-overlay-active");
+  $('#eo-languages a[data-value="' + erebot_language + '"]').addClass("eo-active");
+  $('#eo-versions a[data-value="' + erebot_version + '"]').addClass("eo-active");
 })();

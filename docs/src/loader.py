@@ -20,12 +20,15 @@ var erebot_language = '%(language)s';
 var erebot_version = '%(version)s';
 var erebot_page = '%(page)s';
 var erebot_slug = '%(slug)s';
+var erebot_base = '%(path)s';
 var erebot_builder = '%(builder)s';
+var erebot_suffix = '%(suffix)s';
+var erebot_suffix = '%(suffix)s';
 </script>
-<script type="text/javascript" src="%(path)s"></script>
+<script type="text/javascript" src="%(path)s/../erebot-overlay.js"></script>
 </body>""" % {
             'id': self.piwik_site,
-            'path': context['pathto']('../../../../erebot-overlay.js', 1),
+            'path': context['pathto']('../../../', 1),
             'page': context['pagename'],
             'version': context['version'],
             'project': context['project'],
