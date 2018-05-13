@@ -33,7 +33,7 @@ script:
   - if [ -n "$TRAVIS_PULL_REQUEST_SLUG" ]; then exit 1; fi
   - export GHPAGES=`mktemp -d -p "docs/"`
   - export DEFAULT_BRANCH=`git symbolic-ref --short refs/remotes/origin/HEAD | cut -d/ -f2-`
-  - export DOC_LANGUAGES="$(ls -1 docs/i18n/)"
+  - export DOC_LANGUAGES=`printf "%s " $(ls -1 docs/i18n/)`
   # Preparations
   - git clone --branch=master https://github.com/Erebot/erebot.github.io.git "$GHPAGES/"
   - rm -rf "$GHPAGES/.git"
@@ -50,7 +50,7 @@ before_deploy:
   - if [ -n "$TRAVIS_TAG" ] && [ -d "$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}" ]; then ln -sfT "../refs/${TRAVIS_BRANCH}" "$GHPAGES/${TRAVIS_REPO_SLUG}/aliases/stable"; fi
   - if [ -d "$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}" ]; then ln -sfT "../refs/${TRAVIS_BRANCH}" "$GHPAGES/${TRAVIS_REPO_SLUG}/aliases/latest"; fi
   - printf "%s" '<html><head><meta http-equiv="refresh" content="0; url=aliases/latest/en/html/"/></head><body onload="window.location.replace('"'"'aliases/latest/en/html/'"'"');"></body></html>' > "$GHPAGES/${TRAVIS_REPO_SLUG}/index.html"
-  - export DOC_VERSIONS="$(cd "$GHPAGES/${TRAVIS_REPO_SLUG}"; find aliases/ refs/ -mindepth 1 -maxdepth 1 '(' -type d -o -type l ')' -printf '%f '))"
+  - export DOC_VERSIONS="$(cd "$GHPAGES/${TRAVIS_REPO_SLUG}"; find aliases/ refs/ -mindepth 1 -maxdepth 1 '(' -type d -o -type l ')' -printf '%f)"
   - printf "Languages\n---------\n%s\n\nVersions\n--------\n%s\n" "${DOC_LANGUAGES}" "${DOC_VERSIONS}"
   - sed -e "s^//languages//^languages = '${DOC_LANGUAGES}'^" -e "s^//versions//^versions = '${DOC_VERSIONS}'^" "$GHPAGES/erebot-overlay.js" > "$GHPAGES/${TRAVIS_REPO_SLUG}/erebot-overlay.js"
 
