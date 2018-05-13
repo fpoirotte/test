@@ -110,12 +110,11 @@
 }
 
 #eo-panel > div > div {
-    flex: 50%;
+    flex: 60%;
 }
 
-#eo-panel input {
-    margin-top: 1em;
-    width: 94%;
+#eo-panel > div > div:nth-child(1) {
+    flex: 40%;
 }
 
 .eo-toggle {
@@ -139,6 +138,63 @@
 #eo-title.eo-opened .eo-active::before {
     content: 'Showing: ';
     color: #99F;
+}
+
+#eo-search * {
+    box-sizing: border-box;
+    line-height: 1.5;
+}
+
+#eo-search form {
+    display: table;
+    padding-top: 1em;
+}
+
+#eo-search form > * {
+    display: table-cell;
+}
+
+#eo-search form > input {
+    position: relative;
+    width: 100%;
+    line-height: 20px;
+    min-height: 28px;
+    padding: 3px 0 3px 5px;
+    border: 1px solid #d1d5da;
+    box-shadow: 0 1px 2px rgba(27, 31, 35, 0.075) inset;
+    color: #24292e;
+    outline: medium none;
+    vertical-align: middle;
+    margin: 0;
+}
+
+#eo-search form > div {
+    vertical-align: middle;
+    width: 1%;
+    line-height: 1.5;
+}
+
+#eo-search form > div > label {
+    margin-left: -1px;
+    font-weight: 900;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 20px;
+    padding: 3px 10px;
+    background-color: #eff3f6;
+    background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%);
+    color: #24292e;
+    -moz-appearance: none;
+    -moz-user-select: none;
+    background-position: -1px -1px;
+    background-repeat: repeat-x;
+    background-size: 110% 110%;
+    border: 1px solid rgba(27, 31, 35, 0.2);
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    white-space: nowrap;
 }
 </style>
 ` );
@@ -169,11 +225,12 @@
       </div>
     </div>
     <div>
-      <div>
-        Search
-        <form action="${erebot.base}search.html" method="GET" target="_blank">
-          <input name="q" placeholder="Search in the docs"/>
-        </form>
+    <div id="eo-search">
+          Search
+          <form action="${erebot.base}search.html" method="get" target="_blank">
+            <div><label for="eo-input">&#128270;</label></div>
+            <input id="eo-input" name="q" placeholder="Search in the docs"/>
+          </form>
         </div>
     </div>
   </div>
