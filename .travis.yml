@@ -27,7 +27,6 @@ php:
 script:
   # Install
   - rm composer.lock
-  - composer self-update -n
   - composer install -n
   # Environment
   - if [ -n "$TRAVIS_PULL_REQUEST_SLUG" ]; then exit 1; fi
