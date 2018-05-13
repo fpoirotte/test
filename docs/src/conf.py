@@ -137,7 +137,7 @@ def prepare(globs, locs):
 
     # Load the real Sphinx configuration file.
     os.chdir(cwd)
-    real_conf = join(root, 'vendor', 'erebot', 'buildenv', 'sphinx', 'conf.py')
+    real_conf = join(root, 'docs', 'src', 'real_conf.py')
     print "Including real configuration file (%s)..." % (real_conf, )
     execfile(real_conf, globs, locs)
 

@@ -1,4 +1,4 @@
-$(window).on("load", function () {
+(function () {
   var cur_language = 'en';
   var cur_version = 'latest';
   var languages = 'en fr de it pt es ja';
@@ -156,4 +156,4 @@ $(window).on("load", function () {
 
   $('#erebot-overlay-languages a[data-value="' + cur_language + '"]').addClass("erebot-overlay-active");
   $('#erebot-overlay-versions a[data-value="' + cur_version + '"]').addClass("erebot-overlay-active");
-});
+})();
