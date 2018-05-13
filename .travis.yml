@@ -10,6 +10,7 @@ addons:
       - python-babel
       - doxygen
       - graphviz
+      - ghostscript
       - texlive-latex-base
       - texlive-latex-recommended
       - texlive-latex-extra
@@ -36,7 +37,8 @@ script:
   - cd docs/src/
   - for lang in fr en; do for builder in html latex; do sphinx-build -T -E -b $builder -d ../_build/doctrees -D language=$lang . "../../$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}/$lang/$builder"; done; make -C "../../$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}/$lang/latex/" all-pdf < /dev/null; find "../../$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}/$lang/latex/" ! -name "*.pdf"; done
   - cd ../..
-  - if [ -n "$TRAVIS_TAG" ]; then ln -sfT "refs/${TRAVIS_BRANCH}" "$GHPAGES/${TRAVIS_REPO_SLUG}/stable"; else ln -sfT "refs/${TRAVIS_BRANCH}" "$GHPAGES/${TRAVIS_REPO_SLUG}/latest"; fi
+  - if [ -n "$TRAVIS_TAG" ]; then ln -sfT "refs/${TRAVIS_BRANCH}" "$GHPAGES/${TRAVIS_REPO_SLUG}/stable"; fi
+  - ln -sfT "refs/${TRAVIS_BRANCH}" "$GHPAGES/${TRAVIS_REPO_SLUG}/latest"
   - touch "$GHPAGES/.nojekyll"
   - printf "%s" '<html><head><meta http-equiv="refresh" content="0; url=latest/en/html/"/></head><body onload="window.location.replace('"'"'latest/en/html/'"'"');"></body></html>' > "$GHPAGES/${TRAVIS_REPO_SLUG}/index.html"
 
