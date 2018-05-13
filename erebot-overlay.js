@@ -41,7 +41,7 @@
         has_aliases = true;
         break;
       default:
-        code_versions += ` <a data-value="${versions[ver]}" href="${erebot.base}../../../../refs/${versions[ver]}/${erebot.language}/${erebot.builder}">${versions[ver]}</a>`;
+        code_versions += ` <a data-value="${versions[ver]}" href="${erebot.base}../../../../tag/${versions[ver]}/${erebot.language}/${erebot.builder}">${versions[ver]}</a>`;
     }
   }
 
@@ -51,7 +51,7 @@
       switch (versions[ver]) {
         case 'latest':
         case 'stable':
-          code_versions += ` <a data-value="${versions[ver]}" href="${erebot.base}../../../../aliases/${versions[ver]}/${erebot.language}/${erebot.builder}">${versions[ver]}</a>`;
+          code_versions += ` <a data-value="${versions[ver]}" href="${erebot.base}../../../../alias/${versions[ver]}/${erebot.language}/${erebot.builder}">${versions[ver]}</a>`;
       }
     }
     more_versions += '</div>';
@@ -221,8 +221,8 @@
     <div>
       <div>Contribute:</div>
       <div>
-        <a href="https://github.com/${erebot.project.slug}/edit/${erebot.default_branch}/docs/src/${erebot.page}${erebot.source_suffix}">Edit</a>
-        <a href="https://www.transifex.com/Erebot/">Translate</a>
+        <a target="_blank" href="https://github.com/${erebot.project.slug}/edit/${erebot.default_branch}/docs/src/${erebot.page}${erebot.source_suffix}">Edit</a>
+        <a target="_blank" href="https://www.transifex.com/Erebot/">Translate</a>
       </div>
     </div>
     <div>
