@@ -33,9 +33,9 @@ script:
   - if [ -n "$TRAVIS_PULL_REQUEST_SLUG" ]; then exit 1; fi
   - export GHPAGES=`mktemp -d -p "docs/"`
   - export DEFAULT_BRANCH=`git symbolic-ref --short refs/remotes/origin/HEAD | cut -d/ -f2-`
-  - export DOC_LANGUAGES="$(ls -1 docs/src/i18n/)"
+  - export DOC_LANGUAGES="$(ls -1 docs/i18n/)"
   # Preparations
-  #- git clone --branch=gh-pages https://github.com/Erebot/erebot.github.io.git "$GHPAGES/"
+  - git clone --branch=gh-pages https://github.com/Erebot/erebot.github.io.git "$GHPAGES/"
   - rm -rf "$GHPAGES/.git"
   - touch "$GHPAGES/.nojekyll"
   - rm -rf "$GHPAGES/${TRAVIS_REPO_SLUG}/refs/${TRAVIS_BRANCH}"
