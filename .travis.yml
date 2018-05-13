@@ -63,4 +63,4 @@ deploy:
   verbose: true
   on:
     all_branches: true
-    condition: '-n "$TRAVIS_TAG" -o "$TRAVIS_BRANCH" = "master" -o "$TRAVIS_BRANCH" = "develop"'
+    condition: '-n "$TRAVIS_TAG" || "$TRAVIS_BRANCH" = "master" || "$TRAVIS_BRANCH" = "develop"'
