@@ -1,8 +1,8 @@
 (function () {
   var cur_language = 'en';
   var cur_version = 'latest';
-  var languages = 'en fr de it pt es ja';
-  var versions = '4.3.2 0.2.1 stable 3.14 latest 1.2.3 1.414.27';
+  var languages = ''; //languages//;
+  var versions = '';  //versions//;
 
   var code_lang = '';
   var code_ver = '';
@@ -11,12 +11,17 @@
 
   languages = languages.split(/\s+/).sort();
   for (var lang in languages) {
+    if (languages[lang] === '') {
+      continue;
+    }
     code_lang += ` <a data-value="${languages[lang]}" href="/">${languages[lang]}</a>`
   }
 
   versions = versions.split(/\s+/).sort();
   for (var ver in versions) {
     switch (versions[ver]) {
+      case '':
+        break;
       case 'latest':
         has_latest = true;
         break;
