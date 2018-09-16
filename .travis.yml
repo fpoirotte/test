@@ -1,66 +1,70 @@
 language: php
 sudo: false
-dist: xenial
-
-addons:
-  apt:
-    #update: true
-    packages:
-      - python-sphinx
-      - python-babel
-      - doxygen
-      - graphviz
-      - ghostscript
-      - texlive-latex-base
-      - texlive-latex-recommended
-      - texlive-latex-extra
-      - texlive-fonts-recommended
-      - texlive-lang-french
-      - texlive-lang-english
-
-notifications:
-  email: false
-
-php:
-  - 7
+dist: trusty
 
 script:
-  # Install
-  - rm composer.lock
-  - composer install -n
-  # Environment
-  - if [ -n "$TRAVIS_PULL_REQUEST_SLUG" ]; then exit 1; fi
-  - export GHPAGES=`mktemp -d -p "docs/"`
-  - export DEFAULT_BRANCH=`git symbolic-ref --short refs/remotes/origin/HEAD | cut -d/ -f2-`
-  - export DOC_LANGUAGES=`printf "%s " $(ls -1 docs/i18n/)`
-  - if [ -n "$TRAVIS_TAG" ]; then export OUTDIR="tag/$TRAVIS_TAG"; elif [ "$TRAVIS_BRANCH" = "$DEFAULT_BRANCH" ]; then export OUTDIR="alias/latest"; elif [ "$TRAVIS_BRANCH" = "master" ]; then export OUTDIR="alias/stable"; else exit 1; fi
-  # Preparations
-  - git clone --branch=master https://github.com/Erebot/erebot.github.io.git "$GHPAGES/"
-  - rm -rf "$GHPAGES/.git"
-  - touch "$GHPAGES/.nojekyll"
-  - rm -rf "$GHPAGES/${TRAVIS_REPO_SLUG}/${OUTDIR}"
-  # Building
-  - cd docs/src/
-  - for lang in $DOC_LANGUAGES; do for builder in html latex; do sphinx-build -T -E -b $builder -d ../_build/doctrees -D language=$lang . "../../$GHPAGES/${TRAVIS_REPO_SLUG}/${OUTDIR}/$lang/$builder" || exit 1; done; make -C "../../$GHPAGES/${TRAVIS_REPO_SLUG}/${OUTDIR}/$lang/latex/" all-pdf < /dev/null || exit 1; find "../../$GHPAGES/${TRAVIS_REPO_SLUG}/${OUTDIR}/$lang/latex/" ! -name "*.pdf"; done
-  - cd ../..
+  - find /etc/init.d -ls
+  - dpkg -l
 
-before_deploy:
-  # Glue
-  - mkdir -p "$GHPAGES/${TRAVIS_REPO_SLUG}/alias" "$GHPAGES/${TRAVIS_REPO_SLUG}/tag"
-  - printf "%s" '<html><head><meta http-equiv="refresh" content="0; url=alias/latest/en/html/"/></head><body onload="window.location.replace('"'"'alias/latest/en/html/'"'"');"></body></html>' > "$GHPAGES/${TRAVIS_REPO_SLUG}/index.html"
-  - export DOC_VERSIONS="$(cd "$GHPAGES/${TRAVIS_REPO_SLUG}"; find alias/ tag/ -mindepth 1 -maxdepth 1 '(' -type d -o -type l ')' -printf '%f ')"
-  - printf "Languages\n---------\n%s\n\nVersions\n--------\n%s\n" "${DOC_LANGUAGES}" "${DOC_VERSIONS}"
-  - sed -e "s^//languages//^languages = '${DOC_LANGUAGES}'^" -e "s^//versions//^versions = '${DOC_VERSIONS}'^" "$GHPAGES/erebot-overlay.js" > "$GHPAGES/${TRAVIS_REPO_SLUG}/erebot-overlay.js"
-
-deploy:
-  local-dir: $GHPAGES
-  provider: pages
-  target-branch: master
-  repo: erebot/erebot.github.io
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN
-  #keep-history: true
-  verbose: true
-  on:
-    all_branches: true
-    condition: '-n "$TRAVIS_TAG" || "$TRAVIS_BRANCH" = "master" || "$TRAVIS_BRANCH" = "develop"'
+#addons:
+#  apt:
+#    #update: true
+#    packages:
+#      - python-sphinx
+#      - python-babel
+#      - doxygen
+#      - graphviz
+#      - ghostscript
+#      - texlive-latex-base
+#      - texlive-latex-recommended
+#      - texlive-latex-extra
+#      - texlive-fonts-recommended
+#      - texlive-lang-french
+#      - texlive-lang-english
+#
+#notifications:
+#  email: false
+#
+#php:
+#  - 7
+#
+#script:
+#  # Install
+#  - rm composer.lock
+#  - composer install -n
+#  # Environment
+#  - if [ -n "$TRAVIS_PULL_REQUEST_SLUG" ]; then exit 1; fi
+#  - export GHPAGES=`mktemp -d -p "docs/"`
+#  - export DEFAULT_BRANCH=`git symbolic-ref --short refs/remotes/origin/HEAD | cut -d/ -f2-`
+#  - export DOC_LANGUAGES=`printf "%s " $(ls -1 docs/i18n/)`
+#  - if [ -n "$TRAVIS_TAG" ]; then export OUTDIR="tag/$TRAVIS_TAG"; elif [ "$TRAVIS_BRANCH" = "$DEFAULT_BRANCH" ]; then export OUTDIR="alias/latest"; elif [ "$TRAVIS_BRANCH" = "master" ]; then export OUTDIR="alias/stable"; else exit 1; fi
+#  # Preparations
+#  - git clone --branch=master https://github.com/Erebot/erebot.github.io.git "$GHPAGES/"
+#  - rm -rf "$GHPAGES/.git"
+#  - touch "$GHPAGES/.nojekyll"
+#  - rm -rf "$GHPAGES/${TRAVIS_REPO_SLUG}/${OUTDIR}"
+#  # Building
+#  - cd docs/src/
+#  - for lang in $DOC_LANGUAGES; do for builder in html latex; do sphinx-build -T -E -b $builder -d ../_build/doctrees -D language=$lang . "../../$GHPAGES/${TRAVIS_REPO_SLUG}/${OUTDIR}/$lang/$builder" || exit 1; done; make -C "../../$GHPAGES/${TRAVIS_REPO_SLUG}/${OUTDIR}/$lang/latex/" all-pdf < /dev/null || exit 1; find "../../$GHPAGES/${TRAVIS_REPO_SLUG}/${OUTDIR}/$lang/latex/" ! -name "*.pdf"; done
+#  - cd ../..
+#
+#before_deploy:
+#  # Glue
+#  - mkdir -p "$GHPAGES/${TRAVIS_REPO_SLUG}/alias" "$GHPAGES/${TRAVIS_REPO_SLUG}/tag"
+#  - printf "%s" '<html><head><meta http-equiv="refresh" content="0; url=alias/latest/en/html/"/></head><body onload="window.location.replace('"'"'alias/latest/en/html/'"'"');"></body></html>' > "$GHPAGES/${TRAVIS_REPO_SLUG}/index.html"
+#  - export DOC_VERSIONS="$(cd "$GHPAGES/${TRAVIS_REPO_SLUG}"; find alias/ tag/ -mindepth 1 -maxdepth 1 '(' -type d -o -type l ')' -printf '%f ')"
+#  - printf "Languages\n---------\n%s\n\nVersions\n--------\n%s\n" "${DOC_LANGUAGES}" "${DOC_VERSIONS}"
+#  - sed -e "s^//languages//^languages = '${DOC_LANGUAGES}'^" -e "s^//versions//^versions = '${DOC_VERSIONS}'^" "$GHPAGES/erebot-overlay.js" > "$GHPAGES/${TRAVIS_REPO_SLUG}/erebot-overlay.js"
+#
+#deploy:
+#  local-dir: $GHPAGES
+#  provider: pages
+#  target-branch: master
+#  repo: erebot/erebot.github.io
+#  skip-cleanup: true
+#  github-token: $GITHUB_TOKEN
+#  #keep-history: true
+#  verbose: true
+#  on:
+#    all_branches: true
+#    condition: '-n "$TRAVIS_TAG" || "$TRAVIS_BRANCH" = "master" || "$TRAVIS_BRANCH" = "develop"'
