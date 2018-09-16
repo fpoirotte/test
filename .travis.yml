@@ -3,8 +3,8 @@ sudo: false
 dist: trusty
 
 script:
-  - find /etc/init.d -ls
-  - dpkg -l
+  - service --status-all
+  - service rsyslog status
 
 #addons:
 #  apt:
